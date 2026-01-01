@@ -30,7 +30,7 @@ const StarAnimatedIcon = forwardRef<StarAnimatedIconRef, StarAnimatedIconProps>(
         loop={false}
         autoplay={false}
         style={{ width: size, height: size }}
-        className="-translate-y-[0.09rem]"
+        className="-translate-y-[0.04rem]"
       />
     );
   }

@@ -4,11 +4,13 @@ import HeaderComponent from "./DashBoardComponents/Header";
 import Footer from "./DashBoardComponents/Footer";
 import { Outlet } from "react-router-dom";
 import { sendRequest } from "../utils/ApiUtils";
+import { useNav } from "../contexts/headerAndFooterContext";
 
 export default function Dashboard() {
 
     const { user, setUser } = useUser();
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
+    const { showHeader, showFooter } = useNav();
 
     useEffect(() => {
         if (!user) {
@@ -34,13 +36,11 @@ export default function Dashboard() {
 
     return (
         <div className="">
-            <HeaderComponent/>
-
-            <main className="pt-26 pb-19">
+            {showHeader && <HeaderComponent/>}
+            <main className={`${showHeader ? 'pt-26' : 'pt-0'} ${showFooter ? 'pb-19' : 'pb-0'}`}>
                 { isLoading ? <div className="pt-40 text-center text-lg font-medium">Loading...</div> : <Outlet/> }
             </main>
-
-            <Footer/>
+            {showFooter && <Footer/>}
         </div>
     );
 }

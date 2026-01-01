@@ -1,13 +1,44 @@
 import { useNavigate } from "react-router-dom"
-import { useUser } from "../../contexts/userContext";
 import FireAnimatedIcon from "../UI/FireAnimation";
+import { useUser } from "../../contexts/userContext";
+import { useEffect, useState } from "react";
+import { sendRequest } from "../../utils/ApiUtils";
+import Bookmark from "../UI/BookmarkAnimation";
 
 const Home = () => {
 
-  const navigate = useNavigate()
+  const [recentCollections, setRecentCollections] = useState([]);
+
+  const navigate = useNavigate();
   const { user } = useUser();
 
-  const recent = [];
+  if (!user) {
+    navigate("/");
+  }
+
+  useEffect(() => {
+    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-recent-collections`, 'GET')
+      .then((response) => {
+        if (!response.error) {
+          setRecentCollections(response.data);
+        } else {
+          console.error('Error fetching recent collections:', response.message);
+        } }).catch((error) => {
+        console.error('Network error fetching recent collections:', error);
+      });
+  }, []);
+
+  const handleRecentCollectionClick = (collectionId: number) => {
+
+    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/add-to-recent-collections`, 'POST', {
+      collectionId: collectionId,
+    }).catch((error) => {
+      console.error('Error adding to recent collections:', error);
+    });
+    
+    navigate(`/user/${user?.public_id}/dashboard/collection/${collectionId}`);
+  }
+
   const skeletLenth = 5;
 
   return (
@@ -17,12 +48,12 @@ const Home = () => {
           <h2 className="text-sm font-semibold">Recent</h2>
         </div>
         <div className="">
-          {recent.length === 0 ? (
+          {recentCollections.length === 0 ? (
             <div className="flex flex-col gap-3">
               {[...Array(skeletLenth)].map((_, index) => (
-                <div key={index} className="w-full h-12 bg-gray-200 rounded-md animate-pulse flex items-center justify-between"> 
+                <div key={index} className="w-full h-15 bg-gray-200 rounded-md animate-pulse flex items-center justify-between"> 
                   <div className="flex items-center">
-                    <div className="h-8 w-8 bg-gray-300 rounded-md ml-2"></div>
+                    <div className="h-10 w-10 bg-gray-300 rounded-md ml-2"></div>
                     <div className="flex flex-col items-start justify-center">
                       <div className="h-4 w-42 bg-gray-300 rounded-md ml-4"></div>
                       <div className="h-3 w-20 bg-gray-300 rounded-md ml-4 mt-2"></div>
@@ -36,8 +67,24 @@ const Home = () => {
               ))}
             </div>
           ) : (
-            <div className="w-full h-full overflow-x-auto flex gap-4 items-center px-2">
-              <p>HEllo</p>
+            <div className="flex flex-col gap-2">
+              {recentCollections.map((collection: any) => (
+                <div className="flex w-full justify-between items-center p-2 border border-gray-200 rounded-md hover:shadow-xs cursor-pointer transition-all" key={collection.id} onClick={() => handleRecentCollectionClick(collection.collection_id)}>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-purple-100 rounded-md p-2 flex items-center justify-center">
+                      <i className="bx bxs-collection text-brand text-2xl"></i>
+                    </div>
+                    <div className="flex flex-col justify-center align-start">
+                      <h3 className="font-semibold text-md">{collection.name}</h3>
+                      <p className="text-sm text-gray-500">Author: <span className="font-medium">{user?.username}</span> · {collection.card_count} cards</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1 items-end">
+                    <Bookmark bookmarked={collection.bookmarked} />
+                    <p className="text-xs text-gray-500">{collection.last_opened.slice(0, 10).replace(/-/g, '.')}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -63,15 +110,15 @@ const Home = () => {
       <div id="news" className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold">News</h2>
         <div className="w-full flex flex-col md:flex-row  gap-4">
-          <iframe className="w-full h-55 rounded-md" src="https://www.youtube.com/embed/IpeJjQDXNAE?si=2854ItSsYb6IQFLf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe className="w-full h-55 rounded-md" src="https://www.youtube.com/embed/IpeJjQDXNAE?si=2854ItSsYb6IQFLf" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
           <div className="h-55 w-full flex gap-1 flex-col justify-center items-center rounded-md bg-[#8B5CF6] text-white">
-            <h3 className="font-bold text-4xl">Premium</h3>
+            <h3 className="font-bold text-4xl">Lexiqo Plus</h3>
             <p className="font-medium text-sm">The most officiant way of studying!</p>
 
             <button
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white text-[#8B5CF6] text-sm font-semibold rounded-md shadow-md hover:shadow-xl transition-all"
               aria-label="Upgrade to Premium"
-              onClick={() => navigate('/pricing')}
+              onClick={() => navigate(`/user/${user?.public_id}/premium`)}
             >
               <i className="bx bx-star text-lg" />
               Upgrade Now

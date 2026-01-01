@@ -3,6 +3,7 @@ import { useUser } from '../../contexts/userContext';
 import { useEffect, useState } from 'react';
 import { sendRequest } from '../../utils/ApiUtils';
 import AstronautAnimation from '../UI/Astronaut.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const Library = () => {
   const [collections, setCollections] = useState<Array<{
@@ -16,6 +17,8 @@ const Library = () => {
     bookmarked: boolean;
     color: string;
   }>>([]);
+
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useUser();
@@ -137,6 +140,20 @@ const Library = () => {
     setCollections(sortedCollections);
   }
 
+  const handleCollectionClick = async (event: React.MouseEvent, idex: number) => {
+
+    const collection = collections[idex];
+
+    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/add-to-recent-collections`, 'POST', {
+      collectionId: collection.id,
+    }).catch((error) => {
+      console.error('Error adding to recent collections:', error);
+    });
+
+    navigate(`/user/${user?.public_id}/dashboard/collection/${collection.id}`, { state: { collection: collection } });
+
+  }
+
   const numberOfSkeletons = 4;
 
   if (isLoading) {
@@ -197,16 +214,22 @@ const Library = () => {
         {collections.map((collection, index) => (
           <div
             key={index}
-            className={`flex flex-col h-full gap-3 p-3 border border-t-15 ${colorMap[collection.color] ?? 'border-brand'} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200`}
+            className={`flex flex-col h-full gap-3 p-3 border border-t-15 ${colorMap[collection.color] ?? 'border-brand'} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 z-1`}
+            onClick={(e) => handleCollectionClick(e, index)}
           >
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <div className="py-0.5 px-1.5 rounded-md bg-purple-100 text-brand">
-                  <i className="bx bxs-collection"></i>
+                <div className="p-1.5 rounded-md bg-purple-100 text-brand flex items-center justify-center">
+                  <i className="bx bxs-collection text-2xl"></i>
                 </div>
                 <h2 className="font-semibold">{collection.name}</h2>
               </div>
-              <BookMark bookmarked={collection.bookmarked} onToggle={() => handleBookmark(collection.id, collection.bookmarked ? false : true)}/>
+              <div onClick={(e) => e.stopPropagation()}>
+                <BookMark 
+                  bookmarked={collection.bookmarked} 
+                  onToggle={() => handleBookmark(collection.id, !collection.bookmarked)}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col gap-2">

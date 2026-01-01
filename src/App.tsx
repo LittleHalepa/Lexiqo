@@ -8,6 +8,10 @@ import VerifyEmail from './Components/VerifyEmail';
 import Home from './Components/DashBoardComponents/Home';
 import Library from './Components/DashBoardComponents/Library';
 import AddCollection from './Components/DashBoardComponents/AddCollection';
+import CollectionPage from './Components/CollectionPage';
+import { FlashcardMode } from './Components/CollectionPageComponents/FlashcardsMode';
+import { HeaderAndFooterProvider } from './contexts/headerAndFooterContext.tsx';
+import { PremiumPage } from './Components/PremiumPage';
 
 const router = createBrowserRouter([
   {
@@ -32,26 +36,40 @@ const router = createBrowserRouter([
       },
       {
         path: "library",
-        element: <Library/>
+        element: <Library/>,
       },
       {
         path: "add-collection",
-        element: <AddCollection/>
+        element: <AddCollection/>,
+      },
+      {
+        path: "collection/:collectionId",
+        element: <CollectionPage/>
+      },
+      {
+        path: "collection/:collectionId/flashcards",
+        element: <FlashcardMode/>
       }
     ]
   },
   {
     path: "/user/:publicId/verifyEmail",
     element: <VerifyEmail/>
+  },
+  {
+    path: "user/:publicId/premium",
+    element: <PremiumPage/>
   }
 ]);
 
 function App() {
 
   return (
-    <UserProvider>
-      <RouterProvider router={router} />
-    </UserProvider>
+    <HeaderAndFooterProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
+    </HeaderAndFooterProvider>
   )
 }
 

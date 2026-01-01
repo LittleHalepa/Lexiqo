@@ -35,6 +35,7 @@ export default function Bookmark({ bookmarked, onToggle }: BookmarkProps) {
         loop={false}
         autoplay={false}
         style={{ width: 30, height: 30, cursor: "pointer" }}
+        className="z-10"
       />
     </div>
   );

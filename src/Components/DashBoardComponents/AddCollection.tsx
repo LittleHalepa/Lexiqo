@@ -2,6 +2,18 @@ import { useState } from "react";
 import { sendRequest } from "../../utils/ApiUtils";
 import Message from "../UI/Message";
 
+type FlashcardsProps = {
+    cards: Array<{
+        id: number,
+        collection_id: number,
+        term: string,
+        definition: string,
+        image: string | null,
+        created_at: string,
+        undated_at: string
+    }>;
+}
+
 const AddCollection = () => {
 
   const [isCreating, setIsCreating] = useState(false);

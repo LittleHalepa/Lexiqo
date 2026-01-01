@@ -1,17 +1,18 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import Lottie from "lottie-react";
 import type { LottieRefCurrentProps } from "lottie-react";
-import animationData from "./Animations/Loading Files.json";
+import animationData from "./Animations/Rocket.json";
+import { useEffect } from "react";
 
-export interface LoadingAnimatedIconRef {
+export interface RocketAnimatedIconRef {
   playAnimation: () => void;
 }
 
-interface LoadingAnimatedIconProps {
+interface RocketAnimatedIconProps {
   size?: number;
 }
 
-const LoadingAnimatedIcon = forwardRef<LoadingAnimatedIconRef, LoadingAnimatedIconProps>(
+const RocketAnimatedIcon = forwardRef<RocketAnimatedIconRef, RocketAnimatedIconProps>(
   ({ size = 20 }, ref) => {
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
@@ -23,17 +24,24 @@ const LoadingAnimatedIcon = forwardRef<LoadingAnimatedIconRef, LoadingAnimatedIc
       },
     }));
 
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        lottieRef.current?.goToAndPlay(0, true);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }, []);
+
     return (
       <Lottie
         lottieRef={lottieRef}
         animationData={animationData}
-        loop={true}
-        autoplay={true}
-        style={{ width: size, height: size }}
-        className=""
+        loop={false}
+        autoplay={false}
+        className="scale-200 min-w-full"
       />
     );
   }
 );
 
-export default LoadingAnimatedIcon;
+export default RocketAnimatedIcon;

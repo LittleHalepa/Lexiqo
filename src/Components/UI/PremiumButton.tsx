@@ -1,12 +1,21 @@
 import { useRef } from "react";
 import StarAnimatedIcon from "./StarAnimatedIcon";
 import type { StarAnimatedIconRef } from "./StarAnimatedIcon";
+import { useUser } from "../../contexts/userContext";
+import { useNavigate } from "react-router-dom";
 
 const PremiumButton = () => {
   const starRef = useRef<StarAnimatedIconRef>(null);
 
+  const { user } = useUser();
+  const nav = useNavigate();
+
   const handleClick = () => {
     starRef.current?.playAnimation();
+    
+    if (user) {
+      nav(`/user/${user.public_id}/premium`);
+    }
   };
 
   return (
@@ -15,7 +24,7 @@ const PremiumButton = () => {
       onClick={handleClick}
     >
       <StarAnimatedIcon ref={starRef} size={20} />
-      Premium
+      Lexiqo Plus
     </button>
   );
 };
