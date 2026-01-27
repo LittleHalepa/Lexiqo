@@ -1,18 +1,17 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import Lottie from "lottie-react";
 import type { LottieRefCurrentProps } from "lottie-react";
-import animationData from "./Animations/Rocket.json";
-import { useEffect } from "react";
+import animationData from "./Animations/Confetti.json";
 
-export interface RocketAnimatedIconRef {
+export interface ConfettiAnimatedIconRef {
   playAnimation: () => void;
 }
 
-interface RocketAnimatedIconProps {
+interface ConfettiAnimatedIconProps {
   size?: number;
 }
 
-const RocketAnimatedIcon = forwardRef<RocketAnimatedIconRef, RocketAnimatedIconProps>(
+const ConfettiAnimatedIcon = forwardRef<ConfettiAnimatedIconRef, ConfettiAnimatedIconProps>(
   ({ size = 20 }, ref) => {
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
@@ -24,24 +23,19 @@ const RocketAnimatedIcon = forwardRef<RocketAnimatedIconRef, RocketAnimatedIconP
       },
     }));
 
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        lottieRef.current?.goToAndPlay(0, true);
-      }, 100);
-
-      return () => clearTimeout(timer);
-    }, []);
-
     return (
       <Lottie
         lottieRef={lottieRef}
         animationData={animationData}
         loop={false}
         autoplay={false}
-        className="scale-200 md:scale-180 min-w-full"
+        className="w-full h-full"
+        style={{ width: '100vw', height: '100vh' }}
       />
     );
   }
 );
 
-export default RocketAnimatedIcon;
+ConfettiAnimatedIcon.displayName = "ConfettiAnimatedIcon";
+
+export default ConfettiAnimatedIcon;

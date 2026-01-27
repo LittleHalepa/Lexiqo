@@ -12,7 +12,7 @@ interface LoadingAnimatedIconProps {
 }
 
 const LoadingAnimatedIcon = forwardRef<LoadingAnimatedIconRef, LoadingAnimatedIconProps>(
-  ({ size = 20 }, ref) => {
+  ({ size = 300 }, ref) => {
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     useImperativeHandle(ref, () => ({
@@ -29,7 +29,7 @@ const LoadingAnimatedIcon = forwardRef<LoadingAnimatedIconRef, LoadingAnimatedIc
         animationData={animationData}
         loop={true}
         autoplay={true}
-        style={{ width: size, height: size }}
+        style={{ width: `${size}px`, height: `${size}px` }}
         className=""
       />
     );

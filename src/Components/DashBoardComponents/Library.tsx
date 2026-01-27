@@ -158,14 +158,14 @@ const Library = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         
         {Array.from({ length: numberOfSkeletons }).map((_, index) => (
           <div key={index} className="flex flex-col h-full gap-3 p-3 m-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-md bg-gray-200 animate-pulse"></div>
-                  <div className="w-50 h-6 bg-gray-200 rounded-md animate-pulse"></div>
+                  <div className="w-30 h-6 bg-gray-200 rounded-md animate-pulse"></div>
                 </div>
                 <div className="h-7 w-5 rounded-md bg-gray-200 animate-pulse"></div>
               </div>

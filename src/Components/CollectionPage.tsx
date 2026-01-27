@@ -7,6 +7,8 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { sendRequest } from "../utils/ApiUtils";
 import { useNav } from "../contexts/headerAndFooterContext";
+import LoadingAnimatedIcon from "./UI/LoadingAnimation";
+import AstronautAnimatedIcon from "./UI/Astronaut";
 
 const CollectionPage = () => {
 
@@ -37,6 +39,7 @@ const CollectionPage = () => {
 
   const [index, setIndex] = useState(0);
   const [cardHeight, setCardHeight] = useState("500px");
+  const [error, setError] = useState(false);
 
   const {setShowHeader, setShowFooter} = useNav();
   
@@ -54,6 +57,7 @@ const CollectionPage = () => {
       }).then((data) => {
         if (!data || data.error) {
           setCollection(null);
+          setError(true);
           return;
         }
         setCollection(data.data);
@@ -77,7 +81,6 @@ const CollectionPage = () => {
 
     handleResize();
     window.addEventListener("resize", handleResize);
-    
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -90,6 +93,7 @@ const CollectionPage = () => {
     }).then((data) => {
       if (!data || data.error) {
         setCards([]);
+        setError(true);
         return;
       }
       setCards(data.cards);
@@ -103,14 +107,29 @@ const CollectionPage = () => {
     console.log(`Collection ID: ${collectionId}, New Bookmark State: ${newState}`);
   }
 
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-70vh">
+        <AstronautAnimatedIcon size={250}/>
+        <div className="text-center mt-4">
+          <h2 className="text-2xl font-bold mb-2">Oops! Something went wrong.</h2>
+          <p className="text-gray-600">We couldn't load the collection you're looking for. Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!collection) {
     return (
-      <h1>Loading</h1>
+      <div className="flex flex-col items-center justify-center min-h-70vh">
+        <LoadingAnimatedIcon/>
+        <p className="-translate-y-20 text-lg font-medium animate-pulse text-gray-500">Loading</p>
+      </div>
     );
   }
 
   return (
-    <div className="p-3 flex flex-col lg:flex-row gap-4">
+    <div className="p-3 lg:mt-10 flex flex-col lg:flex-row gap-4">
       <div className="flex flex-col gap-4 w-full lg:w-1/2">
         <div className="flex flex-col items-start gap-4">
           <div className="flex justify-between items-start w-full">

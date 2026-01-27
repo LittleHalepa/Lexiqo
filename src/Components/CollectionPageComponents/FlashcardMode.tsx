@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import HappyAstronautAnimatedIcon from "../UI/HappyAstronautWithMusic";
-import type { ConfettiAnimatedIconRef } from "../UI/Confetti";
+import ConfettiAnimatedIcon, { type ConfettiAnimatedIconRef } from "../UI/Confetti";
 
 type FlashcardsProps = {
     cards: Array<{
@@ -15,7 +15,7 @@ type FlashcardsProps = {
     height?: string,
     index?: number,
     setIndex?: (index: number) => void,
-    confettiRef?: React.RefObject<ConfettiAnimatedIconRef | null>
+    confettiRef?: React.RefObject<ConfettiAnimatedIconRef>
 }
 
 export const Flashcards = ({cards, height, index, setIndex, confettiRef} : FlashcardsProps) => {
@@ -34,12 +34,6 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef} : Flash
         index = 0;
         setIndex = () => {};
     }
-
-    useEffect(() => {
-        if (isDone && confettiRef?.current) {
-            confettiRef.current.playAnimation();
-        }
-    }, [isDone, confettiRef]);
 
     useEffect(() => {
         console.log(cards);
@@ -63,6 +57,12 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef} : Flash
         setIsFlipped(!isFlipped);
     }
 
+    useEffect(() => {
+        if (isDone && confettiRef?.current) {
+            confettiRef.current.playAnimation();
+        }
+    }, [isDone, confettiRef]);
+
     if (isDone) {
         return (
             <div className="flex justify-center flex-col items-center gap-1">
@@ -76,7 +76,6 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef} : Flash
                     <button className="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark transition" onClick={() => {
                         setIndex!(0);
                         setIsFlipped(false);
-                        setIsDone(false);
                         setIsDone(false);
                     }}>Review Again</button>
                 </div>
@@ -143,7 +142,7 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef} : Flash
                     }
                 }}}><i className='bx bx-left-arrow-alt'></i></button>
                 <p className="text-center text-sm text-gray-500">Card {index + 1} of {cards.length}</p>
-                <button className="text-3xl text-black cursor-pointer p-2 rounded-full font-medium transition-all" onClick={() => { if (index !== cards.length - 1){
+                <button className="text-3xl text-black cursor-pointer p-2 rounded-full font-medium transition-all hover:bg-gray-200" onClick={() => { if (index !== cards.length - 1){
                     if (isFlipped) {
                         setIsFlipped(false);
                         setTimeout(() => {

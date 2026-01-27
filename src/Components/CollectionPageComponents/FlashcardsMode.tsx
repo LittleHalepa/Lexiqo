@@ -1,8 +1,9 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNav } from "../../contexts/headerAndFooterContext";
 import { Flashcards } from "./FlashcardsComponent";
 import { sendRequest } from "../../utils/ApiUtils";
+import ConfettiAnimatedIcon, { type ConfettiAnimatedIconRef } from "../UI/Confetti.tsx";
 
 export const FlashcardMode = () => {
 
@@ -15,6 +16,8 @@ export const FlashcardMode = () => {
     const { setShowHeader, setShowFooter } = useNav();
     const [isLoading, setIsLoading] = useState(true);
     const [cardIndex, setCardIndex] = useState(0);
+    const [cardHeight, setCardHeight] = useState("600px");
+    const confettiRef = useRef<ConfettiAnimatedIconRef>(null);
     const [cards, setCards] = useState<Array<{
         id: number,
         collection_id: number,
@@ -22,7 +25,7 @@ export const FlashcardMode = () => {
         definition: string,
         image: string | null,
         created_at: string,
-        undated_at: string
+        updated_at: string
     }>>([]);
 
     useEffect(() => {
@@ -46,6 +49,22 @@ export const FlashcardMode = () => {
         }).finally(() => {
             setIsLoading(false);
         });
+
+        const handleResize = () => {
+            const width = window.innerWidth;
+            if (width < 768) {
+                setCardHeight("600px"); // sm
+            } else if (width < 1024) {
+                setCardHeight("700px"); // md
+            } else {
+                setCardHeight("800px"); // lg
+            }
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
     const handleBackToCollection = () => {
         const currentPath = location.pathname;
@@ -70,6 +89,9 @@ export const FlashcardMode = () => {
 
     return (
         <div className="min-h-screen flex justify-center items-center p-3">
+            <div className="fixed inset-0 pointer-events-none z-100 overflow-hidden">
+                <ConfettiAnimatedIcon ref={confettiRef} />
+            </div>
             <div className="fixed right-0 left-0 top-0 flex justify-between items-center py-4 z-10 bg-white border-b border-gray-300">
                 <div className={`absolute h-1 left-0 top-15 bg-brand transition-all duration-300 z-10`} 
                 style={{
@@ -97,7 +119,7 @@ export const FlashcardMode = () => {
                     </ul>
                 </div>
             </div>
-            <div className="w-full max-w-3xl pt-20 pb-10">
+            <div className="w-full max-w-3xl pt-20 md:-translate-x-25 pb-10">
                 {isLoading ? (<div className="mx-4"> 
                     <div className="h-[550px] bg-gray-200 animate-pulse rounded-md"></div>
                     <div className="flex justify-between items-center mt-3">
@@ -105,7 +127,7 @@ export const FlashcardMode = () => {
                     <div className="bg-gray-200 animate-pulse h-4 w-20 rounded-md"></div>
                     <i className='bx bx-right-arrow-alt text-3xl font-medium text-gray-400 animate-pulse' ></i>
                     </div>
-                </div>) : (<Flashcards cards={cards} height="550px" index={cardIndex} setIndex={setCardIndex}/>)}
+                </div>) : (<Flashcards cards={cards} height={cardHeight} index={cardIndex} setIndex={setCardIndex} confettiRef={confettiRef}/>)}
             </div>
         </div>
     );

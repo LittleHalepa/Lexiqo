@@ -1,23 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sendRequest } from "../../utils/ApiUtils";
 import Message from "../UI/Message";
-
-type FlashcardsProps = {
-    cards: Array<{
-        id: number,
-        collection_id: number,
-        term: string,
-        definition: string,
-        image: string | null,
-        created_at: string,
-        undated_at: string
-    }>;
-}
 
 const AddCollection = () => {
 
   const [isCreating, setIsCreating] = useState(false);
-  const [message, setMessage] = useState<{status: 'success' | 'error' | 'info', text: string, device: 'desktop' | 'mobile'} | null>(null);
+  
+  type Notification = {
+    status: 'success' | 'error' | 'info';
+    text: string;
+  };
+
+  // Inside your component:
+  const [message, setMessage] = useState<Notification | null>(null);
+
   const [flashcards, setFlashcards] = useState<Array<{term: string, definition: string}>>([
     {term: "", definition: ""},
   ]);
@@ -28,6 +24,24 @@ const AddCollection = () => {
   });
 
   const [selectedColor, setSelectedColor] = useState<string>('bg-brand');
+  const [deviceType, setDeviceType] = useState<'mobile' | 'desktop'>('mobile');
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setDeviceType('mobile');
+      } else {
+        setDeviceType('desktop');
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const colors = [
     'bg-brand',
@@ -39,6 +53,13 @@ const AddCollection = () => {
     'bg-pink-500',
     'bg-black'
   ];
+
+  useEffect(() => {
+    setFocusStates({
+      term: flashcards.map(() => false),
+      def: flashcards.map(() => false),
+    });
+  }, [flashcards.length]);
 
   const handleFocus = (type: "term" | "def", idx: number, val: boolean) => {
     setFocusStates((prev) => ({
@@ -69,6 +90,15 @@ const AddCollection = () => {
       term: prev.term.filter((_, i) => i !== index),
       def: prev.def.filter((_, i) => i !== index),
     }));
+  };
+
+  const showNotification = (text: string, status: 'success' | 'error' | 'info' = 'error') => {
+    setMessage({ text, status });
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
   };
 
   const handleShowColorPicker = () => {
@@ -136,65 +166,68 @@ const AddCollection = () => {
     }
   }
 
-  const handleCreateCollection = () => {
-
+  // 2. Updated Create Logic
+  const handleCreateCollection = async () => {
     if (isCreating) return;
-    setIsCreating(true);
 
-    if (flashcards.length === 0) {
-      setIsCreating(false);
-      setMessage({status: "error", text: "Please add at least one flashcard.", device: 'mobile'});
-      setTimeout(() => {
-        setMessage(null);
-      }, 3000);
+    const titleInput = document.getElementById('title') as HTMLInputElement;
+    const descriptionInput = document.getElementById('description') as HTMLTextAreaElement;
+
+    const title = titleInput.value;
+    const description = descriptionInput.value;
+
+    // Validation
+    if (!title.trim()) {
+      showNotification("Please enter a collection title.");
       return;
     }
 
-    const body = {
-      name: (document.getElementById("title") as HTMLInputElement).value,
-      description: (document.getElementById("description") as HTMLInputElement).value,
-      collectionData: flashcards,
-      color: selectedColor.replace('bg-', ''),
+    if (flashcards.length === 0) {
+      showNotification("Please add at least one flashcard.");
+      return;
     }
 
-    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/create-collection`, 'POST', body).then((data) => {
+    setIsCreating(true);
+
+    const body = {
+      name: title,
+      description: description,
+      collectionData: flashcards,
+      color: selectedColor.replace('bg-', ''),
+    };
+
+    try {
+      const data = await sendRequest(
+        `${import.meta.env.VITE_BACKEND_URL}/api/dashboard/create-collection`, 
+        'POST', 
+        body
+      );
+
       if (data.error) {
-        setIsCreating(false);
-        setMessage({status: "error", text: data.message || "An error occurred while creating the collection.", device: 'mobile'});
-        setTimeout(() => {
-          setMessage(null);
-        }, 3000);
-      } else if (!data.error) {
-        setMessage({status: "success", text: "Success", device: 'mobile'});
-
-        setTimeout(() => {
-          setMessage(null);
-        }, 3000);
-
-        (document.getElementById("title") as HTMLInputElement).value = '';
-        (document.getElementById("description") as HTMLInputElement).value = '';
-        setIsCreating(false);
-        setFlashcards([]);
+        showNotification(data.message || "An error occurred.", "error");
       } else {
-        setIsCreating(false);
-        setMessage({status: "error", text: "An error occurred while creating the collection.", device: 'mobile'});
-        setTimeout(() => {
-          setMessage(null);
-        }, 3000);
+        showNotification("Collection created successfully!", "success");
+        // Reset Form
+        titleInput.value = "";
+        descriptionInput.value = "";
+        setFlashcards([{ term: "", definition: "" }]);
       }
-    });
-  }
+    } catch (err) {
+      showNotification("Server connection failed.", "error");
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   return (
     <div className="p-3 w-full flex flex-col gap-8 relative max-w-7xl m-auto">
       {message && (
         <div 
-          id="message-element" 
-          className={`fixed top-26 transition-all animate-slide-down animate-slide-in
-            ${message.device === 'mobile' ? 'left-[0.5rem] right-[0.5rem]' : 'w-auto'}
-            z-50`}
+          className={`fixed left-1/2 -translate-x-1/2 z-[100] transition-all animate-slide-down
+            ${deviceType === 'mobile' ? 'w-[90%] top-26' : 'w-auto min-w-[300px] top-10 '}
+          `}
         >
-          <Message status={message.status} text={message.text}/>
+          <Message status={message.status} text={message.text} />
         </div>
       )}
       <div>

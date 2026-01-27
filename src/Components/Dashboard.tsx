@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../contexts/userContext";
 import HeaderComponent from "./DashBoardComponents/Header";
 import Footer from "./DashBoardComponents/Footer";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { sendRequest } from "../utils/ApiUtils";
 import { useNav } from "../contexts/headerAndFooterContext";
 
@@ -11,6 +11,8 @@ export default function Dashboard() {
     const { user, setUser } = useUser();
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
     const { showHeader, showFooter } = useNav();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!user) {
@@ -26,6 +28,7 @@ export default function Dashboard() {
                 } else {
                     setUser(null);
                     alert("Failed to fetch user data.");
+                    navigate('/login');
                 }
 
                 setIsLoading(false);

@@ -72,7 +72,7 @@ export const PremiumPage = () => {
                 <RocketAnimating />
             </div>
         </div>
-        <div id="premium-page" className="z-5 relative bg-white translate-y-[150%] w-full min-h-screen transition-transform duration-700 flex flex-col justify-start items-center p-3 shadow-lg pt-12 before:content-[''] before:absolute before:inset-0 before:bg-white before:rounded-full before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-[150%] before:h-[150%] before:scale-150">
+        <div id="premium-page" className="z-5 relative bg-white translate-y-[150%] w-full min-h-screen transition-transform duration-700 flex flex-col justify-start items-center p-3 shadow-lg pt-12 before:content-[''] before:absolute before:inset-0 before:bg-white before:rounded-full before:top-0 before:left-1/2 before:-translate-x-1/2 before:w-[150%] md:before:w-[90%] md:before:h-[90%] before:h-[150%] before:scale-150">
             <div id="logo-container" className="absolute top-0 -left-5 right-0 flex transition-all duration-700 opacity-0" onClick={() => nav( user ? `/user/${user.public_id}/dashboard/home` : "/" )}>
                 <img src={lexiqoLogo} alt="Lexiqo Logo" width={60} />
             </div>

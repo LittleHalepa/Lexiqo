@@ -211,7 +211,6 @@ export default function Login() {
                     return;
                 }
 
-                console.log('Login successful:', userData.message);
                 navigate(`/user/${userData.user.public_id}/dashboard/home`);
                 setUser(userData.user);
                 return;
