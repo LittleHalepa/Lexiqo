@@ -8,7 +8,7 @@ type MessageProps = {
     device?: 'mobile' | 'desktop'
 }
 
-const Message = ( {status, text, device}: MessageProps ) => {
+const Message = ( {status, text}: MessageProps ) => {
   return (
     <div className={`py-2 text-sm rounded-lg w-full transform flex items-center justify-center gap-1 z-10 
     ${status === 'success' ? 'bg-green-100 text-green-700' : ''}

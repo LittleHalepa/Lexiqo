@@ -140,7 +140,7 @@ const Library = () => {
     setCollections(sortedCollections);
   }
 
-  const handleCollectionClick = async (event: React.MouseEvent, idex: number) => {
+  const handleCollectionClick = async (idex: number) => {
 
     const collection = collections[idex];
 
@@ -215,7 +215,7 @@ const Library = () => {
           <div
             key={index}
             className={`flex flex-col h-full gap-3 p-3 border border-t-15 ${colorMap[collection.color] ?? 'border-brand'} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 z-1`}
-            onClick={(e) => handleCollectionClick(e, index)}
+            onClick={() => handleCollectionClick(index)}
           >
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">

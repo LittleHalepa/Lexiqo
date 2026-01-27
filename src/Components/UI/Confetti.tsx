@@ -7,12 +7,10 @@ export interface ConfettiAnimatedIconRef {
   playAnimation: () => void;
 }
 
-interface ConfettiAnimatedIconProps {
-  size?: number;
-}
 
-const ConfettiAnimatedIcon = forwardRef<ConfettiAnimatedIconRef, ConfettiAnimatedIconProps>(
-  ({ size = 20 }, ref) => {
+
+const ConfettiAnimatedIcon = forwardRef<ConfettiAnimatedIconRef, {}>(
+  (_ ,ref) => {
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     useImperativeHandle(ref, () => ({

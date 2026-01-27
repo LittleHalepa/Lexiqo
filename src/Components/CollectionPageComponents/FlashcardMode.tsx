@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import HappyAstronautAnimatedIcon from "../UI/HappyAstronautWithMusic";
-import ConfettiAnimatedIcon, { type ConfettiAnimatedIconRef } from "../UI/Confetti";
+import { type ConfettiAnimatedIconRef } from "../UI/Confetti";
 
 type FlashcardsProps = {
     cards: Array<{

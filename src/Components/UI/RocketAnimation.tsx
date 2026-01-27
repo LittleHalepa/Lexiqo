@@ -12,8 +12,8 @@ interface RocketAnimatedIconProps {
   size?: number;
 }
 
-const RocketAnimatedIcon = forwardRef<RocketAnimatedIconRef, RocketAnimatedIconProps>(
-  ({ size = 20 }, ref) => {
+const RocketAnimatedIcon = forwardRef<RocketAnimatedIconRef, {}>(
+  (_, ref) => {
     const lottieRef = useRef<LottieRefCurrentProps>(null);
 
     useImperativeHandle(ref, () => ({

@@ -1,11 +1,11 @@
-import { useUser } from "../../contexts/userContext";
+// import { useUser } from "../../contexts/userContext";
 import logo from "/blackLogo.png"
 import PremiumButton from "../UI/PremiumButton";
 import QuickSearchInput from "../UI/QuickSearchInput";
 
 export default function HeaderComponent() {
 
-    const { user } = useUser();
+    //TODO: const { user } = useUser();
     //TODO: Use user data to show profile picture and hotness score
 
     return (
