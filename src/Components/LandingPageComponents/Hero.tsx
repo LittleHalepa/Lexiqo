@@ -20,12 +20,15 @@ export default function Hero() {
                 <div className="flex items-start gap-3">
                     <i className='bx bxs-error-alt text-amber-600 text-2xl flex-shrink-0'></i>
                     <div>
-                    <p className="text-sm text-amber-900 font-semibold mb-1">
-                        Early Tech Demo
-                    </p>
-                    <p className="text-sm text-amber-800">
-                        This is an early tech demo. Expect bugs and incomplete features. The landing page does NOT contain real stats and reviews, but rather represents our ideal future and goals.
-                    </p>
+                        <p className="text-sm text-amber-900 font-semibold mb-1">
+                            Early Tech Demo
+                        </p>
+                        <p className="text-sm text-amber-800">
+                            This is an early tech demo. Expect bugs and incomplete features. The landing page does NOT contain real stats and reviews, but rather represents our ideal future and goals.
+                        </p>
+                        <p className="text-red-500 text-sm font-medium mt-4">
+                            Server isn't running yet! Site is under construction.
+                        </p>
                     </div>
                 </div>
             </div>
