@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom";
 
 export default function Benefits() {
+
+    const nav = useNavigate();
+
     return (
         <section className="w-full bg-black text-white py-25 px-5">
             <div className="mb-10">
@@ -28,7 +32,7 @@ export default function Benefits() {
                     </ul>
                 </div>
             </div>
-            <button className="bg-fire text-white text-base py-3 px-6 rounded-lg font-medium mt-15 block mx-auto cursor-pointer hover:opacity-90 transition-all active:opacity-80">
+            <button className="bg-fire text-white text-base py-3 px-6 rounded-lg font-medium mt-15 block mx-auto cursor-pointer hover:opacity-90 transition-all active:opacity-80" onClick={() => nav('/login')}>
                 Get Started for Free <i className='bx bx-right-arrow-alt text-[1rem] translate-x-2 translate-y-0.5'></i>
             </button>
             <p className="text-xs text-gray-300 text-center mt-5">No credit card required &#8226; Free forever plan</p>
