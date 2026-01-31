@@ -6,8 +6,8 @@ export default function Header() {
     const navigate = useNavigate();
 
     return (
-        <header className="flex justify-between items-center w-full mb-10 md:mb-15">
-            <div className="flex items-center space-x-1">
+        <header className="relative flex justify-between items-center w-full mb-10 md:mb-15">
+            <div className="flex relative items-center space-x-1">
                 <img src={logo} alt="Lexiqo logo" width={45}/>
                 <h1 className="font-bold text-[1.2rem]">Lexiqo</h1>
             </div>

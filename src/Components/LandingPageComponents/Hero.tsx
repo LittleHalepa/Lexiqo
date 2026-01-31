@@ -5,9 +5,12 @@ export default function Hero() {
     const nav = useNavigate();
 
     return (
-        <section className="mb-20 ">
+        <section className="mb-20">
             <h1 className="font-bold text-center text-6xl leading-16 md:text-7xl md:leading-20">Learn <span className="text-brand block">Smarter</span><span className="block mb-7">Not Harder</span></h1>
-            <p className="text-center mx-auto text-lg text-gray-500 max-w-2xl leading-8 mb-17">Master any subject with intelligent flashcards designed to maximize retention and minimize study time.</p>
+            <p className="text-center mx-auto text-lg text-gray-500 max-w-2xl leading-8 mb-8">Master any subject with intelligent flashcards designed to maximize retention and minimize study time.</p>
+            <div className="flex items-center justify-center">
+                <p className="text-center px-4 py-2 rounded-full text-md font-medium mb-8 flex items-center justify-center gap-1 text-fire bg-[rgba(255,64,0,0.1)]"><i className='bx bx-time-five text-lg'></i> Tech demo on the horizon!</p>
+            </div>
             <div className="flex flex-col justify-center gap-4 md:flex-row">
                 <button className="bg-brand hover:opacity-90 cursor-pointer text-sm text-white py-3 rounded-lg font-medium md:px-8 transition-all" onClick={() => nav('/login')}>
                     Start Learning Free <i className='bx bx-right-arrow-alt text-[1rem] translate-x-2 translate-y-0.5'></i>
@@ -16,7 +19,7 @@ export default function Hero() {
                     <i className='bx bx-play text-[1.1rem] translate-x-[-0.3rem] translate-y-[0.2rem]' ></i> Watch Demo
                 </button>
             </div>
-            <div className="bg-amber-50 mt-16 border-l-4 border-amber-500 rounded-lg p-4 shadow-md">
+            <div className="bg-amber-50 relative mt-16 border-l-4 border-amber-500 rounded-lg p-4 shadow-md">
                 <div className="flex items-start gap-3">
                     <i className='bx bxs-error-alt text-amber-600 text-2xl flex-shrink-0'></i>
                     <div>
@@ -25,9 +28,6 @@ export default function Hero() {
                         </p>
                         <p className="text-sm text-amber-800">
                             This is an early tech demo. Expect bugs and incomplete features. The landing page does NOT contain real stats and reviews, but rather represents our ideal future and goals.
-                        </p>
-                        <p className="text-red-500 text-sm font-medium mt-4">
-                            Server isn't running yet! Site is under construction.
                         </p>
                     </div>
                 </div>
