@@ -192,8 +192,8 @@ const Library = () => {
   if (collections.length === 0) {
     return (
       <div className="flex justify-center flex-col gap-3 items-center min-h-[70vh]">
-        <AstronautAnimation size={250} />
-        <p className="text-gray-500">No collections found</p>
+        <AstronautAnimation size={300} />
+        <p className="text-gray-500 text-xl">No collections found</p>
       </div>
     );
   }
