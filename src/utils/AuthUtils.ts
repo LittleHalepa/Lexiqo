@@ -32,7 +32,7 @@ export async function registerUser(username: string, email: string, password: st
             recaptchaToken
         }
 
-        const response = await fetch(`http://localhost:3000/api/auth/register`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': "application/json"
@@ -67,7 +67,7 @@ export async function loginUser(email: string, password: string, recaptchaToken:
             recaptchaToken
         }
 
-        const response = await fetch(`http://localhost:3000/api/auth/login`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': "application/json"
