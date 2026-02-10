@@ -84,6 +84,16 @@ export const FlashcardMode = () => {
         setCardIndex(0);
     }
 
+    const handleSwapCards = () => {
+        const swappedCards = cards.map(card => ({
+            ...card,
+            term: card.definition,
+            definition: card.term
+        }));
+        setCards(swappedCards);
+        setCardIndex(0);
+    }
+
     const handleModesButtonClick = () => {
         const settingsMenu = document.getElementById('settings-dropdown');
 
@@ -162,6 +172,7 @@ export const FlashcardMode = () => {
                 <div id="settings-dropdown" className="absolute right-1 top-13 rounded-md shadow-sm bg-white/70 backdrop-blur-2xl border border-gray-300 hidden z-20">
                     <ul className="flex flex-col gap-1 p-3 text-lg font-medium">
                         <li className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all" onClick={handleRandomizeCards}><i className='bx bxs-dice-4' ></i> Randomize</li>
+                        <li className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all" onClick={handleSwapCards}><i className='bx bx-transfer' ></i> Swap</li>
                     </ul>
                 </div>
             </div>
