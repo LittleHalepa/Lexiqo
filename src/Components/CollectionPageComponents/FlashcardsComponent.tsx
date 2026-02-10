@@ -108,9 +108,9 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef} : Flash
                             WebkitBackfaceVisibility: 'hidden',
                         }}
                         >
-                        <div className="text-center">
-                            <p className="text-2xl font-semibold text-gray-800">{cards[index].term}</p>
-                        </div>
+                            <div className="text-center">
+                                <p className="text-2xl font-semibold text-gray-800">{cards[index].term}</p>
+                            </div>
                         </div>
 
                         {/* Back Side */}

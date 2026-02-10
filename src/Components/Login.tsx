@@ -103,7 +103,7 @@ export default function Login() {
         });
 
         if (!response.ok) {
-            setGeneralError("Something went wrong");
+            setGeneralError("Something went wrong during reCAPTCHA verification. Please try again.");
             return;
         }
 

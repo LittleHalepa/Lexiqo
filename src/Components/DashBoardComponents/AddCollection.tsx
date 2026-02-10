@@ -234,11 +234,11 @@ const AddCollection = () => {
         <div className="w-full flex flex-col gap-4 z-5">
           <div className="flex flex-col z-5">
             <label htmlFor="title" className="font-semibold text-sm md:text-base translate-y-0.5">Title</label>
-            <input type="text" id="title" className="bg-white shadow-sm py-1.5 px-3 text-sm font-medium border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" placeholder="Enter collection title"/>
+            <input type="text" id="title" className="bg-white shadow-sm py-1.5 px-3 text-sm font-medium border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" placeholder="Enter collection title" maxLength={25}/>
           </div>
           <div className="flex flex-col z-5">
             <label htmlFor="description" className="font-semibold text-sm md:text-base translate-y-0.5">Description</label>
-            <textarea id="description" className="bg-white shadow-sm py-1.5 px-3 text-sm font-medium border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all w-full h-32 resize-none" placeholder="Enter collection description"></textarea>
+            <textarea id="description" className="bg-white shadow-sm py-1.5 px-3 text-sm font-medium border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all w-full h-32 resize-none" placeholder="Enter collection description" maxLength={100}></textarea>
           </div>
         </div>
       </div>
@@ -290,7 +290,7 @@ const AddCollection = () => {
                     <div className=" w-full flex flex-col md:flex-row gap-4 x-5">
                       <div className="w-full flex flex-col gap-1 relative">
                         <input type="text" id={`term-${index}`} value={flashcard.term} onFocus={() => {handleFocus("term", index, true)}} onBlur={() => handleFocus("term", index, false)} onChange={(e) => handleInputChange(index, "term", e.target.value)}
-                        className="bg-white shadow-sm py-1.5 px-3 text-sm md:text-base font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all"/>
+                        className="bg-white shadow-sm py-1.5 px-3 text-sm md:text-base font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" maxLength={40}/>
                         <label htmlFor={`term-${index}`} className={`text-sm md:text-base font-semibold text-gray-500 absolute left-3 transition-all duration-200
                           ${
                             focusStates.term[index] || flashcard.term.length > 0
@@ -300,7 +300,7 @@ const AddCollection = () => {
                         `}>Term</label>
                       </div>
                       <div className="w-full flex flex-col gap-1 relative">
-                        <input type="text" id={`definition-${index}`} className="bg-white shadow-sm md:text-base py-1.5 px-3 text-sm font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" value={flashcard.definition} onFocus={() => handleFocus("def", index, true)} onBlur={() => handleFocus("def", index, false)} onChange={(e) => handleInputChange(index, "definition", e.target.value)}/>
+                        <input type="text" id={`definition-${index}`} className="bg-white shadow-sm md:text-base py-1.5 px-3 text-sm font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" value={flashcard.definition} onFocus={() => handleFocus("def", index, true)} onBlur={() => handleFocus("def", index, false)} onChange={(e) => handleInputChange(index, "definition", e.target.value)} maxLength={40}/>
                         <label htmlFor={`definition-${index}`} className={`text-sm md:text-base font-semibold text-gray-500 absolute left-3 transition-all duration-200
                           ${
                             focusStates.def[index] || flashcard.definition.length > 0

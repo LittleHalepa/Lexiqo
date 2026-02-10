@@ -73,7 +73,26 @@ export const FlashcardMode = () => {
         nav(collectionPath, { state: { collection: collection } });
     }
 
+    const handleRandomizeCards = () => {
+        const shuffle = [...cards];
+
+        for (let i = shuffle.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffle[i], shuffle[j]] = [shuffle[j], shuffle[i]];
+        }
+        setCards(shuffle);
+        setCardIndex(0);
+    }
+
     const handleModesButtonClick = () => {
+        const settingsMenu = document.getElementById('settings-dropdown');
+
+        if (settingsMenu && !settingsMenu.classList.contains('hidden')) {
+            settingsMenu.classList.add('hidden');
+            const conIcon = document.querySelector('.bxs-cog');
+            conIcon?.classList.remove('rotate-180');
+        }
+
         const modesMenu = document.getElementById('modes-dropdown');
         const dropdownIcon= document.getElementById('dropdown-icon');
         if (modesMenu) {
@@ -83,6 +102,28 @@ export const FlashcardMode = () => {
             } else {
                 modesMenu.classList.add('hidden');
                 dropdownIcon?.classList.remove('rotate-180');
+            }
+        }
+    }
+
+    const handleSettingsButtonClick = () => {
+
+        const modesMenu = document.getElementById('modes-dropdown');
+        const dropdownIcon= document.getElementById('dropdown-icon');
+        if (modesMenu && !modesMenu.classList.contains('hidden')) {
+            modesMenu.classList.add('hidden');
+            dropdownIcon?.classList.remove('rotate-180');
+        }
+
+        const settingsMenu = document.getElementById('settings-dropdown');
+        const conIcon = document.querySelector('.bxs-cog');
+        if (settingsMenu) {
+            if (settingsMenu.classList.contains('hidden')) {
+                settingsMenu.classList.remove('hidden');
+                conIcon?.classList.add('rotate-180');
+            } else {
+                settingsMenu.classList.add('hidden');
+                conIcon?.classList.remove('rotate-180');
             }
         }
     }
@@ -100,14 +141,14 @@ export const FlashcardMode = () => {
                 <button className="ml-2 text-xs border shadow-sm hover:bg-gray-100 cursor-pointer rounded-lg px-2 py-1 border-[rgba(51,51,51,20%)] flex items-center gap-1" onClick={() => handleBackToCollection()}>
                     <i className='text-md translate-y-[0.05rem] bx bx-left-arrow-alt'></i> Back
                 </button>
-                <h2 className="absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold">{collection.name}</h2>
-                <div className="mr-2">
+                <h2 className="absolute left-1/2 transform text-center -translate-x-1/2 text-lg font-semibold">{collection.name}</h2>
+                <div className="flex items-center gap-4 mr-2 relative">
                     <button className="text-2xl" onClick={handleModesButtonClick}>
                         <i id="dropdown-icon" className='bx bx-chevron-down transition-all'></i>
                         <i className='bx bxs-collection' ></i>
                     </button>
-                    <button id="settings-button" className="text-2xl ml-4">
-                        <i className='bx bxs-cog' ></i>
+                    <button id="settings-button" className="text-2xl" onClick={handleSettingsButtonClick}>
+                        <i className='bx bxs-cog transition-all' ></i>
                     </button>
                 </div>
                 <div id="modes-dropdown" className="absolute right-1 top-13 rounded-md shadow-sm bg-white/70 backdrop-blur-2xl border border-gray-300 hidden z-20">
@@ -116,6 +157,11 @@ export const FlashcardMode = () => {
                         <li id="learn" className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bx-brain' ></i> Learn</li>
                         <li id="test" className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bxs-graduation' ></i> Test</li>
                         <li id="challenge" className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bx-game' ></i> Challenge</li>
+                    </ul>
+                </div>
+                <div id="settings-dropdown" className="absolute right-1 top-13 rounded-md shadow-sm bg-white/70 backdrop-blur-2xl border border-gray-300 hidden z-20">
+                    <ul className="flex flex-col gap-1 p-3 text-lg font-medium">
+                        <li className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all" onClick={handleRandomizeCards}><i className='bx bxs-dice-4' ></i> Randomize</li>
                     </ul>
                 </div>
             </div>
