@@ -290,7 +290,7 @@ const AddCollection = () => {
                     <div className=" w-full flex flex-col md:flex-row gap-4 x-5">
                       <div className="w-full flex flex-col gap-1 relative">
                         <input type="text" id={`term-${index}`} value={flashcard.term} onFocus={() => {handleFocus("term", index, true)}} onBlur={() => handleFocus("term", index, false)} onChange={(e) => handleInputChange(index, "term", e.target.value)}
-                        className="bg-white shadow-sm py-1.5 px-3 text-sm md:text-base font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" maxLength={100}/>
+                        className="bg-white shadow-sm py-1.5 px-3 text-sm md:text-base font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" maxLength={200}/>
                         <label htmlFor={`term-${index}`} className={`text-sm md:text-base font-semibold text-gray-500 absolute left-3 transition-all duration-200
                           ${
                             focusStates.term[index] || flashcard.term.length > 0
@@ -300,7 +300,7 @@ const AddCollection = () => {
                         `}>Term</label>
                       </div>
                       <div className="w-full flex flex-col gap-1 relative">
-                        <input type="text" id={`definition-${index}`} className="bg-white shadow-sm md:text-base py-1.5 px-3 text-sm font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" value={flashcard.definition} onFocus={() => handleFocus("def", index, true)} onBlur={() => handleFocus("def", index, false)} onChange={(e) => handleInputChange(index, "definition", e.target.value)} maxLength={100}/>
+                        <input type="text" id={`definition-${index}`} className="bg-white shadow-sm md:text-base py-1.5 px-3 text-sm font-semibold border-2 border-gray-200 outline-none rounded-md focus:border-[rgb(100,26,230)] transition-all" value={flashcard.definition} onFocus={() => handleFocus("def", index, true)} onBlur={() => handleFocus("def", index, false)} onChange={(e) => handleInputChange(index, "definition", e.target.value)} maxLength={200}/>
                         <label htmlFor={`definition-${index}`} className={`text-sm md:text-base font-semibold text-gray-500 absolute left-3 transition-all duration-200
                           ${
                             focusStates.def[index] || flashcard.definition.length > 0
