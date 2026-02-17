@@ -15,10 +15,22 @@ type FlashcardsProps = {
     height?: string,
     index?: number,
     setIndex?: (index: number) => void,
-    confettiRef?: React.RefObject<ConfettiAnimatedIconRef | null>
+    confettiRef?: React.RefObject<ConfettiAnimatedIconRef | null>,
+    color: string,
 }
 
-export const Flashcards = ({cards, height, index, setIndex, confettiRef} : FlashcardsProps) => {
+const colorMap: Record<string, string> = {
+        '[#641ae6]': 'bg-[#641ae6]',
+        'yellow-500': 'bg-yellow-500',
+        'pink-500': 'bg-pink-500',
+        'red-500': 'bg-red-500',
+        'orange-500': 'bg-orange-500',
+        'green-500': 'bg-green-500',
+        'blue-500': 'bg-blue-500',
+        'black': 'bg-gray-800',
+    };
+
+export const Flashcards = ({cards, height, index, setIndex, confettiRef, color} : FlashcardsProps) => {
 
     const [isDone, setIsDone] = useState(false);
 
@@ -115,7 +127,7 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef} : Flash
 
                         {/* Back Side */}
                         <div
-                        className="absolute w-full h-full bg-brand rounded-xl shadow-lg p-8 flex items-center justify-center"
+                        className={`absolute w-full h-full ${colorMap[color] || 'bg-brand'} rounded-xl shadow-lg p-8 flex items-center justify-center`}
                         style={{
                             backfaceVisibility: 'hidden',
                             WebkitBackfaceVisibility: 'hidden',

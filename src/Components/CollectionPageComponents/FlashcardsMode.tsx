@@ -28,6 +28,17 @@ export const FlashcardMode = () => {
         updated_at: string
     }>>([]);
 
+    const colorMap: Record<string, string> = {
+        '[#641ae6]': 'bg-[#641ae6]',
+        'yellow-500': 'bg-yellow-500',
+        'pink-500': 'bg-pink-500',
+        'red-500': 'bg-red-500',
+        'orange-500': 'bg-orange-500',
+        'green-500': 'bg-green-500',
+        'blue-500': 'bg-blue-500',
+        'black': 'bg-gray-800',
+    };
+
     useEffect(() => {
         setShowHeader(false);
         setShowFooter(false);
@@ -144,7 +155,7 @@ export const FlashcardMode = () => {
                 <ConfettiAnimatedIcon ref={confettiRef} />
             </div>
             <div className="fixed right-0 left-0 top-0 flex justify-between items-center py-4 z-10 bg-white border-b border-gray-300">
-                <div className={`absolute h-1 left-0 top-15 bg-brand transition-all duration-300 z-10`} 
+                <div className={`absolute h-1 left-0 top-15 ${colorMap[collection.color] || 'bg-brand'} transition-all duration-300 z-10`} 
                 style={{
                     width: `${cards.length ? ((cardIndex) / cards.length) * 100 : 0}%`
                 }}></div>
@@ -184,7 +195,7 @@ export const FlashcardMode = () => {
                     <div className="bg-gray-200 animate-pulse h-4 w-20 rounded-md"></div>
                     <i className='bx bx-right-arrow-alt text-3xl font-medium text-gray-400 animate-pulse' ></i>
                     </div>
-                </div>) : (<Flashcards cards={cards} height={cardHeight} index={cardIndex} setIndex={setCardIndex} confettiRef={confettiRef}/>)}
+                </div>) : (<Flashcards cards={cards} height={cardHeight} index={cardIndex} setIndex={setCardIndex} confettiRef={confettiRef} color={collection.color}/>)}
             </div>
         </div>
     );

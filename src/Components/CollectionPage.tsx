@@ -162,7 +162,7 @@ const CollectionPage = () => {
             <div className="bg-gray-200 animate-pulse h-4 w-20 rounded-md"></div>
             <i className='bx bx-right-arrow-alt text-3xl font-medium text-gray-400 animate-pulse' ></i>
           </div>
-        </div>) : (<Flashcards cards={cards} index={index} setIndex={setIndex} height={cardHeight}/>)}
+        </div>) : (<Flashcards cards={cards} index={index} setIndex={setIndex} height={cardHeight} color={collection.color}/>)}
       </div>
     </div>
   )
