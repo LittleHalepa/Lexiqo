@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import FireAnimatedIcon from "../UI/FireAnimation";
 import { useUser } from "../../contexts/userContext";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { sendRequest } from "../../utils/ApiUtils";
 import Bookmark from "../UI/BookmarkAnimation";
 
