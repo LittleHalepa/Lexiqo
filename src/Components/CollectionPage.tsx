@@ -1,4 +1,4 @@
-import { useUser } from "../contexts/userContext"
+
 import profilePicture from '/avatars/default.png';
 import BookMark from "./UI/BookmarkAnimation";
 import { Modes } from "./CollectionPageComponents/Modes";
@@ -11,8 +11,6 @@ import LoadingAnimatedIcon from "./UI/LoadingAnimation";
 import AstronautAnimatedIcon from "./UI/Astronaut";
 
 const CollectionPage = () => {
-
-  const { user } = useUser();
 
   const [cards, setCards] = useState<Array<{
     id: number,
