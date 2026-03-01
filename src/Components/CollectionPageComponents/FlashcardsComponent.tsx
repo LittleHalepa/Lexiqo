@@ -97,7 +97,10 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef, color} 
     }
 
     return (
-        <div className={`px-4 md:px-0 ${height ? `h-[${height}px]` : 'h-[70vh] md:h-[80vh]' }`}>
+        <div 
+        className={`px-4 md:px-0 ${!height ? 'h-[70vh] md:h-[80vh]' : ''}`}
+        style={{ height: height || undefined }}
+        >
             <div className="flex items-center h-full justify-center">
                 <div className="w-full h-full">
                     <div 
