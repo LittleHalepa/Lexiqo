@@ -16,6 +16,9 @@ const Library = () => {
     updated_at: string;
     bookmarked: boolean;
     color: string;
+    username: string;
+    uuid: string;
+    is_public: boolean;
   }>>([]);
 
   const navigate = useNavigate();
@@ -150,7 +153,7 @@ const Library = () => {
       console.error('Error adding to recent collections:', error);
     });
 
-    navigate(`/user/${user?.public_id}/dashboard/collection/${collection.id}`, { state: { collection: collection } });
+    navigate(`/user/${user?.public_id}/dashboard/collection/${collection.uuid}`,);
 
   }
 
@@ -214,7 +217,7 @@ const Library = () => {
         {collections.map((collection, index) => (
           <div
             key={index}
-            className={`flex flex-col h-full gap-3 p-3 border border-t-15 ${colorMap[collection.color] ?? 'border-brand'} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 z-1`}
+            className={`flex cursor-pointer flex-col h-full gap-3 p-3 border border-t-15 ${colorMap[collection.color] ?? 'border-brand'} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 z-1`}
             onClick={() => handleCollectionClick(index)}
           >
             <div className="flex justify-between items-center">
@@ -236,9 +239,12 @@ const Library = () => {
               <p className="mt-2 text-sm text-gray-500 line-clamp-2 leading-5 min-h-[40px]">
                 {collection.description}
               </p>
-              <p className="text-sm text-gray-600 font-medium">
-                &#8226; {collection.card_count} cards
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-gray-600 font-medium">
+                  &#8226; {collection.card_count} cards
+                </p>
+                {collection.is_public ? <i className='bx bx-globe'></i> : <i className='bx bxs-lock-alt'></i>}
+              </div>
             </div>
 
             <div className="mt-auto pt-3 border-t border-gray-200 flex items-center justify-between">

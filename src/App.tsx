@@ -12,6 +12,7 @@ import CollectionPage from './Components/CollectionPage';
 import { FlashcardMode } from './Components/CollectionPageComponents/FlashcardsMode';
 import { HeaderAndFooterProvider } from './contexts/headerAndFooterContext.tsx';
 import { PremiumPage } from './Components/PremiumPage';
+import { PublicCollectionPage } from './Components/PublicComponents/PublicCollectionPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -57,8 +58,22 @@ const router = createBrowserRouter([
     element: <VerifyEmail/>
   },
   {
-    path: "user/:publicId/premium",
+    path: "/user/:publicId/premium",
     element: <PremiumPage/>
+  },
+  {
+    path: "/public_collections/:publicId",
+    element: <PublicCollectionPage/>,
+    children: [
+      {
+        path: "",
+        element: <CollectionPage/>
+      },
+      {
+        path : "flashcards",
+        element: <FlashcardMode/>
+      }
+    ]
   }
 ]);
 

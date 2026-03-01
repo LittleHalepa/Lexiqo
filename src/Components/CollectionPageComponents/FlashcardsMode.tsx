@@ -14,6 +14,7 @@ export const FlashcardMode = () => {
     const nav = useNavigate();
     
     const { setShowHeader, setShowFooter } = useNav();
+    const [isPublic, setIsPublic] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [cardIndex, setCardIndex] = useState(0);
     const [cardHeight, setCardHeight] = useState("600px");
@@ -46,7 +47,7 @@ export const FlashcardMode = () => {
 
     useEffect(() => {
         sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-cards`, 'POST', {
-            id: collection.id
+            collectionUuid: collection.uuid
         }).then((data) => {
     
             if (data.error || !data) {
@@ -75,13 +76,17 @@ export const FlashcardMode = () => {
         handleResize();
         window.addEventListener("resize", handleResize);
 
+        const currentPath = location.pathname;
+        if (currentPath.includes('/public_collections/')) {
+            setIsPublic(true);
+        }
+
         return () => window.removeEventListener("resize", handleResize);
     }, []);
     const handleBackToCollection = () => {
         const currentPath = location.pathname;
         const collectionPath = currentPath.split('/flashcards')[0];
-
-        nav(collectionPath, { state: { collection: collection } });
+        nav(collectionPath);
     }
 
     const handleRandomizeCards = () => {
@@ -187,7 +192,7 @@ export const FlashcardMode = () => {
                     </ul>
                 </div>
             </div>
-            <div className="w-full max-w-3xl pt-20 md:-translate-x-25 pb-10">
+            <div className={`w-full max-w-3xl pt-20 pb-10 ${isPublic ? 'md:-translate-x-0 -translate-y-15' : 'md:-translate-x-25'} transition-all`}>
                 {isLoading ? (<div className="mx-4"> 
                     <div className="h-[550px] bg-gray-200 animate-pulse rounded-md"></div>
                     <div className="flex justify-between items-center mt-3">

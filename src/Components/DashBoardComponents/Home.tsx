@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import FireAnimatedIcon from "../UI/FireAnimation";
 import { useUser } from "../../contexts/userContext";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { sendRequest } from "../../utils/ApiUtils";
 import Bookmark from "../UI/BookmarkAnimation";
 
@@ -13,9 +13,11 @@ const Home = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  if (!user) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,15 +37,14 @@ const Home = () => {
       });
   }, []);
 
-  const handleRecentCollectionClick = (collectionId: number) => {
-
+  const handleRecentCollectionClick = (collection: any) => {
     sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/add-to-recent-collections`, 'POST', {
-      collectionId: collectionId,
+      collectionId: collection.collection_id,
     }).catch((error) => {
       console.error('Error adding to recent collections:', error);
     });
-    
-    navigate(`/user/${user?.public_id}/dashboard/collection/${collectionId}`);
+
+    navigate(`/user/${user?.public_id}/dashboard/collection/${collection.uuid}`,);
   }
 
   const skeletLenth = 5;
@@ -82,7 +83,7 @@ const Home = () => {
           ) : (
             <div className="flex flex-col gap-2">
               {recentCollections.map((collection: any) => (
-                <div className="flex w-full justify-between items-center p-2 border border-gray-200 rounded-md hover:shadow-xs cursor-pointer transition-all" key={collection.id} onClick={() => handleRecentCollectionClick(collection.collection_id)}>
+                <div className="flex w-full justify-between items-center p-2 border border-gray-200 rounded-md hover:shadow-xs cursor-pointer transition-all" key={collection.id} onClick={() => handleRecentCollectionClick(collection)}>
                   <div className="flex items-center gap-3">
                     <div className="bg-purple-100 rounded-md p-2 flex items-center justify-center">
                       <i className="bx bxs-collection text-brand text-2xl"></i>

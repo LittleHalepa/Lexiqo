@@ -5,6 +5,7 @@ import { loginUser } from '../utils/AuthUtils';
 import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/userContext';
 import { useLocation } from "react-router-dom";
+import { getUserInformation } from '../utils/UserUtils';
 
 export default function Login() {
 
@@ -75,6 +76,13 @@ export default function Login() {
             }
         };
         checkRecaptcha();
+
+        getUserInformation().then(data => {
+            if (!data.error && data.user) {
+                navigate(`/user/${data.user.public_id}/dashboard/home`);
+                setUser(data.user);
+            }// no need to log an error here if it's just a missing/expired session
+        });
 
     }, []);
 

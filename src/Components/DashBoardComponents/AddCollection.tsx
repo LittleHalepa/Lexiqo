@@ -282,7 +282,7 @@ const AddCollection = () => {
                     <div className="w-full flex items-center justify-between">
                       <p className="text-sm md:text-base font-bold text-gray-500">{index + 1}</p>
                       <div className="flex items-center">
-                        <i className='bx bx-trash text-xl md:text-2xl text-gray-400 cursor-pointer active:text-red-500 transition-all' onClick={() => handleDeleteCard(index)}></i>
+                        <i className='bx bx-trash text-2xl text-gray-400 cursor-pointer active:text-red-500 transition-all' onClick={() => handleDeleteCard(index)}></i>
                         <i className='bx bx-image-add text-3xl text-gray-400 cursor-pointer ml-4 translate-y-0.5'></i>
                         <i className='bx bx-dots-vertical-rounded text-2xl text-gray-400  cursor-pointer ml-3'></i>
                       </div>
