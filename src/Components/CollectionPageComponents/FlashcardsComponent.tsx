@@ -97,13 +97,13 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef, color} 
     }
 
     return (
-        <div className="px-4 md:px-0">
-            <div className="flex items-center justify-center">
-                <div className="w-full">
+        <div className="px-4 md:px-0" style={{ height: height || '80vh' }}>
+            <div className="flex items-center h-full justify-center">
+                <div className="w-full h-full">
                     <div 
-                    className="relative cursor-pointer "
+                    className="relative h-full cursor-pointer"
                     onClick={handleRotateCard}
-                    style={{ perspective: '1000px', height: height || '256px', transformStyle: 'preserve-3d' }}
+                    style={{ perspective: '1000px',transformStyle: 'preserve-3d' }}
                     >
                     <div
                         className="absolute w-full h-full transition-transform duration-600"

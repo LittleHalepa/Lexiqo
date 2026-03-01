@@ -17,7 +17,6 @@ export const FlashcardMode = () => {
     const [isPublic, setIsPublic] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [cardIndex, setCardIndex] = useState(0);
-    const [cardHeight, setCardHeight] = useState("600px");
     const confettiRef = useRef<ConfettiAnimatedIconRef>(null);
     const [cards, setCards] = useState<Array<{
         id: number,
@@ -62,26 +61,10 @@ export const FlashcardMode = () => {
             setIsLoading(false);
         });
 
-        const handleResize = () => {
-            const width = window.innerWidth;
-            if (width < 768) {
-                setCardHeight("600px"); // sm
-            } else if (width < 1024) {
-                setCardHeight("700px"); // md
-            } else {
-                setCardHeight("800px"); // lg
-            }
-        };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-
         const currentPath = location.pathname;
         if (currentPath.includes('/public_collections/')) {
             setIsPublic(true);
         }
-
-        return () => window.removeEventListener("resize", handleResize);
     }, []);
     const handleBackToCollection = () => {
         const currentPath = location.pathname;
@@ -200,7 +183,7 @@ export const FlashcardMode = () => {
                     <div className="bg-gray-200 animate-pulse h-4 w-20 rounded-md"></div>
                     <i className='bx bx-right-arrow-alt text-3xl font-medium text-gray-400 animate-pulse' ></i>
                     </div>
-                </div>) : (<Flashcards cards={cards} height={cardHeight} index={cardIndex} setIndex={setCardIndex} confettiRef={confettiRef} color={collection.color}/>)}
+                </div>) : (<Flashcards cards={cards}  index={cardIndex} setIndex={setCardIndex} confettiRef={confettiRef} color={collection.color}/>)}
             </div>
         </div>
     );
