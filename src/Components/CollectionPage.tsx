@@ -212,7 +212,7 @@ const CollectionPage = () => {
   }
 
   return (
-    <div className="p-3 lg:mt-10 flex flex-col lg:flex-row gap-4">
+    <div className="p-3 pb-26 lg:mt-10 flex flex-col lg:flex-row gap-4">
       <div className="flex flex-col gap-4 w-full lg:w-1/2">
         <div className="flex flex-col items-start gap-4">
           <div className="flex justify-between items-start w-full">
