@@ -13,6 +13,7 @@ import { FlashcardMode } from './Components/CollectionPageComponents/FlashcardsM
 import { HeaderAndFooterProvider } from './contexts/headerAndFooterContext.tsx';
 import { PremiumPage } from './Components/PremiumPage';
 import { PublicCollectionPage } from './Components/PublicComponents/PublicCollectionPage.tsx';
+import { ErrorPage } from './Components/ErrorPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,11 @@ const router = createBrowserRouter([
         element: <FlashcardMode/>
       }
     ]
-  }
+  },
+  {
+    path: '*',
+    element: <ErrorPage/>,
+  },
 ]);
 
 function App() {
