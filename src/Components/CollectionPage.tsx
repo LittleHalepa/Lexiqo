@@ -228,6 +228,9 @@ const CollectionPage = () => {
               {isPrivateUrl && <BookMark bookmarked={collection.bookmarked} onToggle={() => handleBookmark(collection.id, collection.bookmarked ? false : true)}/>}
             </div>
           </div>
+          <div className="flex mt-2 items-center gap-2 py-3 border-t border-gray-400 border-dashed border-b w-full">
+            <p className="text-sm text-gray-500 text-center w-full">{collection.description}</p>
+          </div>
           <div className="relative">
             <button
               onClick={() => {
@@ -271,9 +274,6 @@ const CollectionPage = () => {
                 <div id="copy-done-label" className="absolute py-0.5 px-1.5 rounded-xl -top-5 opacity-0 pointer-events-none transition-all left-1/2 -translate-x-1/2 text-sm font-medium text-green-100 bg-green-500">Done</div>
                 </button>
                 <a href={`${import.meta.env.VITE_FRONTEND_URL}/public_collections/${collection.uuid}`} target="_blank" className="text-3xl text-gray-600 cursor-pointer"><i className='bx bx-link-alt'></i></a>
-              </div>
-              <div className="flex mt-2 items-center gap-2 py-3 border-t border-gray-400 border-dashed border-b w-full">
-                <p className="text-sm text-gray-500 text-center w-full">{collection.description}</p>
               </div>
             </>
           )}
