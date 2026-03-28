@@ -117,7 +117,7 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef, color} 
                     >
                         {/* Front Side */}
                         <div
-                        className="absolute w-full h-full bg-white rounded-xl shadow-lg p-8 flex items-center justify-center border border-gray-400"
+                        className="absolute w-full h-full bg-white rounded-xl shadow-lg p-8 flex items-center justify-center border border-gray-400 overflow-y-auto"
                         style={{
                             backfaceVisibility: 'hidden',
                             WebkitBackfaceVisibility: 'hidden',
@@ -130,7 +130,7 @@ export const Flashcards = ({cards, height, index, setIndex, confettiRef, color} 
 
                         {/* Back Side */}
                         <div
-                        className={`absolute w-full h-full ${colorMap[color] || 'bg-brand'} rounded-xl shadow-lg p-8 flex items-center justify-center`}
+                        className={`absolute w-full h-full ${colorMap[color] || 'bg-brand'} rounded-xl shadow-lg p-8 flex items-center justify-center overflow-y-auto`}
                         style={{
                             backfaceVisibility: 'hidden',
                             WebkitBackfaceVisibility: 'hidden',
