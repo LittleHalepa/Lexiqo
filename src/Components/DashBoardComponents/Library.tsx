@@ -1,6 +1,6 @@
 import BookMark from '../UI/BookmarkAnimation';
 import { useUser } from '../../contexts/userContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sendRequest } from '../../utils/ApiUtils';
 import AstronautAnimation from '../UI/Astronaut.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +20,23 @@ const Library = () => {
     uuid: string;
     is_public: boolean;
   }>>([]);
+  const [lastId, setLastId] = useState<number | null>(null);
+  const [lastCreatedAt, setLastCreatedAt] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [selectedFilter, setSelectedFilter] = useState<string>('most-recent');
 
   const navigate = useNavigate();
+
+  const cursorRef = useRef<{
+    lastId: number | null;
+    lastCreatedAt: string | null;
+  }>({
+    lastId: null,
+    lastCreatedAt: null,
+  });
+
+  const loadingRef = useRef(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useUser();
@@ -37,26 +52,98 @@ const Library = () => {
     'black': 'border-gray-800',
   };
 
+  const limit = 24;
+
   useEffect(() => {
-    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-collections`, 'GET')
+    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-collections?limit=${limit}`, 'GET')
       .then((data) => {
-        if (!data || data.error) {
-          setCollections([]);
-          console.error(data ? data.message : 'Failed to fetch collections');
-          return;
+        if (!data || data.error) return;
+
+        setCollections(data.collections);
+
+        if (data.collections.length > 0) {
+          const last = data.collections[data.collections.length - 1];
+
+          setLastId(last.id);
+          setLastCreatedAt(last.created_at);
+
+          cursorRef.current = {
+            lastId: last.id,
+            lastCreatedAt: last.created_at,
+          };
         }
 
-        const sortedData = data.data.sort((a: any, b: any) => {
-          if (a.bookmarked === b.bookmarked) {
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-          }
-          return a.bookmarked ? -1 : 1;
-        });
-
-        setCollections(sortedData);
+        setHasMore(data.hasMore);
       })
-      .finally(() => setIsLoading(false)); 
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   }, []);
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore && !loadingRef.current) {
+        loadMoreCollections();
+      }
+    });
+
+    const current = observerRef.current;
+
+    if (current) observer.observe(current);
+
+    return () => {
+      if (current) observer.unobserve(current);
+    };
+  }, [isLoading, hasMore]);
+
+  const loadMoreCollections = async () => {
+    if (!hasMore || loadingRef.current) return;
+
+    loadingRef.current = true;
+    setIsLoadingMore(true);
+
+    const { lastId, lastCreatedAt } = cursorRef.current;
+
+    let url;
+    if (lastId !== null && lastCreatedAt !== null) {
+      url = `${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-collections?limit=${limit}&lastId=${lastId}&lastCreatedAt=${lastCreatedAt}`;
+    } else {
+      url = `${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-collections?limit=${limit}`;
+    }
+
+    try {
+      const data = await sendRequest(url, 'GET');
+      if (!data || data.error) return;
+
+      setCollections((prev) => {
+        const newItems = data.collections.filter(
+          (n: any) => !prev.some((p) => p.id === n.id)
+        );
+        return [...prev, ...newItems];
+      });
+
+      if (data.collections.length > 0) {
+        const last = data.collections[data.collections.length - 1];
+
+        setLastId(last.id);
+        setLastCreatedAt(last.created_at);
+
+        cursorRef.current = {
+          lastId: last.id,
+          lastCreatedAt: last.created_at,
+        };
+      }
+
+      setHasMore(data.hasMore);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoadingMore(false);
+      loadingRef.current = false;
+    }
+  };
 
   const handleBookmark = (collectionId: number, newState: boolean) => {  
     sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/bookmark-collection`, 'POST', {
@@ -82,65 +169,62 @@ const Library = () => {
       });
   }
 
+  const sortRef = useRef<string>('most_recent');
+
   const handleSelectFilter = (filter: string) => {
-    let sortedCollections = [...collections];
+    setIsLoading(true);
+    let sortParam: string;
+
     switch (filter) {
       case 'most-recent':
-        sortedCollections.sort((a, b) => {
-          if (a.bookmarked && b.bookmarked) {
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-          } else if (a.bookmarked && !b.bookmarked) {
-            return -1;
-          } else if (!a.bookmarked && b.bookmarked) {
-            return 1;
-          } else {
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-          }
-        });
+        sortParam = 'most_recent';
         break;
       case 'least-recent':
-        sortedCollections.sort((a, b) => {
-          if (a.bookmarked && b.bookmarked) {
-            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-          } else if (a.bookmarked && !b.bookmarked) {
-            return -1;
-          } else if (!a.bookmarked && b.bookmarked) {
-            return 1;
-          } else {
-            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-          }
-        });
+        sortParam = 'oldest_first';
         break;
       case 'most-cards':
-        sortedCollections.sort((a, b) => {
-          if (a.bookmarked && b.bookmarked) {
-            return b.card_count - a.card_count;
-          } else if (a.bookmarked && !b.bookmarked) {
-            return -1;
-          } else if (!a.bookmarked && b.bookmarked) {
-            return 1;
-          } else {
-            return b.card_count - a.card_count;
-          }
-        });
+        sortParam = 'most_cards';
         break;
       case 'least-cards':
-        sortedCollections.sort((a, b) => {
-          if (a.bookmarked && b.bookmarked) {
-            return a.card_count - b.card_count;
-          } else if (a.bookmarked && !b.bookmarked) {
-            return -1;
-          } else if (!a.bookmarked && b.bookmarked) {
-            return 1;
-          } else {
-            return a.card_count - b.card_count;
-          }
-        }); 
+        sortParam = 'least_cards';
         break;
       default:
-        break;
+        sortParam = 'most_recent';
     }
-    setCollections(sortedCollections);
+
+    setSelectedFilter(filter);
+    sortRef.current = sortParam;
+    setCollections([]);
+    setLastId(null);
+    setLastCreatedAt(null);
+    setHasMore(true);
+
+    cursorRef.current = {
+      lastId: null,
+      lastCreatedAt: null,
+    };
+
+    sendRequest(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-collections?limit=${limit}&sort=${sortParam}`, 'GET')
+      .then((data) => {
+        if (!data || data.error) return;
+
+        setCollections(data.collections);
+
+        if (data.collections.length > 0) {
+          const last = data.collections[data.collections.length - 1];
+
+          setLastId(last.id);
+          setLastCreatedAt(last.created_at);
+
+          cursorRef.current = {
+            lastId: last.id,
+            lastCreatedAt: last.created_at,
+          };
+        }
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+
   }
 
   const handleCollectionClick = async (idex: number) => {
@@ -163,7 +247,7 @@ const Library = () => {
     return (
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         
-        {Array.from({ length: numberOfSkeletons }).map((_, index) => (
+        {Array.from({ length: numberOfSkeletons }).map((_, index: number) => (
           <div key={index} className="flex flex-col h-full gap-3 p-3 m-3 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -204,7 +288,7 @@ const Library = () => {
   return (
     <div className="">
       <div className="col-span-full flex justify-end px-3 py-2">
-        <select name="filter-options" id="filter-options" className="text-sm p-2" onChange={(event) => handleSelectFilter(event?.target.value)}>
+        <select name="filter-options" value={selectedFilter} id="filter-options" className="text-sm p-2" onChange={(event) => handleSelectFilter(event?.target.value)}>
           <option value="most-recent" className="text-sm ">Most Recent</option>
           <option value="least-recent" className="text-sm ">Least Recent</option>
           <option value="most-cards" className="text-sm ">Most Cards</option>
@@ -216,7 +300,7 @@ const Library = () => {
 
         {collections.map((collection, index) => (
           <div
-            key={index}
+            key={collection.id}
             className={`flex cursor-pointer flex-col h-full gap-3 p-3 border border-t-15 ${colorMap[collection.color] ?? 'border-brand'} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 z-1`}
             onClick={() => handleCollectionClick(index)}
           >
@@ -265,6 +349,36 @@ const Library = () => {
             </div>
           </div>
         ))}
+        <div ref={observerRef} className=" w-full col-span-full">
+          {isLoadingMore && (
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {Array.from({ length: numberOfSkeletons }).map((_, index: number) => (
+                  <div key={index} className="flex flex-col h-full gap-3 p-3  border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-md bg-gray-200 animate-pulse"></div>
+                          <div className="w-30 h-6 bg-gray-200 rounded-md animate-pulse"></div>
+                        </div>
+                        <div className="h-7 w-5 rounded-md bg-gray-200 animate-pulse"></div>
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <div className="mt-2 h-12 bg-gray-200 rounded-md animate-pulse"></div>
+                        <div className="w-20 h-5 bg-gray-200 rounded-md animate-pulse"></div>
+                      </div>
+
+                      <div className="mt-auto border-t pt-3 border-gray-100 flex items-center justify-between">
+                        <div className="flex items-center gap-1">
+                          <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+                          <div className="w-30 h-5 bg-gray-200 rounded-md animate-pulse"></div>
+                        </div>
+                        <div className="w-20 h-5 bg-gray-200 rounded-md animate-pulse"></div>
+                      </div>
+                  </div>
+                ))}
+              </div>
+          )}
+        </div>
       </div>
     </div>
   );
