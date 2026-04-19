@@ -20,8 +20,6 @@ const Library = () => {
     uuid: string;
     is_public: boolean;
   }>>([]);
-  const [lastId, setLastId] = useState<number | null>(null);
-  const [lastCreatedAt, setLastCreatedAt] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [selectedFilter, setSelectedFilter] = useState<string>('most-recent');
@@ -63,9 +61,6 @@ const Library = () => {
 
         if (data.collections.length > 0) {
           const last = data.collections[data.collections.length - 1];
-
-          setLastId(last.id);
-          setLastCreatedAt(last.created_at);
 
           cursorRef.current = {
             lastId: last.id,
@@ -126,9 +121,6 @@ const Library = () => {
 
       if (data.collections.length > 0) {
         const last = data.collections[data.collections.length - 1];
-
-        setLastId(last.id);
-        setLastCreatedAt(last.created_at);
 
         cursorRef.current = {
           lastId: last.id,
@@ -195,8 +187,6 @@ const Library = () => {
     setSelectedFilter(filter);
     sortRef.current = sortParam;
     setCollections([]);
-    setLastId(null);
-    setLastCreatedAt(null);
     setHasMore(true);
 
     cursorRef.current = {
@@ -212,9 +202,6 @@ const Library = () => {
 
         if (data.collections.length > 0) {
           const last = data.collections[data.collections.length - 1];
-
-          setLastId(last.id);
-          setLastCreatedAt(last.created_at);
 
           cursorRef.current = {
             lastId: last.id,
