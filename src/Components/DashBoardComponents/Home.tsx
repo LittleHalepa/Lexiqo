@@ -116,7 +116,7 @@ const Home = () => {
           </div>
           <div>
             <div className="shadow-sm rounded-md px-3 py-1 mt-2">
-              <p className="text-sm text-brand font-medium">Best: 14 days</p>
+              <p className="text-sm text-brand font-medium">Best: 0 days</p>
             </div>
           </div>
         </div>
