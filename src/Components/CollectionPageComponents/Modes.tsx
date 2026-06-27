@@ -12,6 +12,13 @@ export const Modes = ({isLoading, collection} : any) => {
         nav(`${location.pathname}/flashcards`, {state: { collection: collection}});
     }
 
+    const handleTestButtonClick = () => {
+
+        if (isLoading) return;
+
+        nav(`${location.pathname}/test`, {state: { collection: collection}});
+    }
+
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2 w-full">
             <div className={`flex flex-col items-center justify-center p-6 border border-gray-300 rounded-lg hover:shadow-sm cursor-pointer gap-2 transition-shadow ${isLoading ? 'bg-gray-200 animate-pulse' : 'bg-white animate-none'} transition-all`} onClick={handleFlashcardsButtonClick}>
@@ -22,7 +29,7 @@ export const Modes = ({isLoading, collection} : any) => {
                 <i className={`bx bxs-brain text-3xl ${isLoading ? 'text-gray-500' : 'text-black'}`}></i>
                 <h2 className={`font-semibold text-lg ${isLoading ? 'text-gray-500' : 'text-black'}`}>Learn</h2>
             </div>
-            <div className={`flex flex-col items-center justify-center p-6 border border-gray-300 rounded-lg hover:shadow-sm cursor-pointer gap-2 transition-shadow ${isLoading ? 'bg-gray-200 animate-pulse' : 'bg-white animate-none'} transition-all`}>
+            <div className={`flex flex-col items-center justify-center p-6 border border-gray-300 rounded-lg hover:shadow-sm cursor-pointer gap-2 transition-shadow ${isLoading ? 'bg-gray-200 animate-pulse' : 'bg-white animate-none'} transition-all`} onClick={handleTestButtonClick}>
                 <i className={`bx bxs-graduation text-3xl ${isLoading ? 'text-gray-500' : 'text-black'}`}></i>
                 <h2 className={`font-semibold text-lg ${isLoading ? 'text-gray-500' : 'text-black'}`}>Test</h2>
             </div>

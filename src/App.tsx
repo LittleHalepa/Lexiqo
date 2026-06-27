@@ -14,6 +14,7 @@ import { HeaderAndFooterProvider } from './contexts/headerAndFooterContext.tsx';
 import { PremiumPage } from './Components/PremiumPage';
 import { PublicCollectionPage } from './Components/PublicComponents/PublicCollectionPage.tsx';
 import { ErrorPage } from './Components/ErrorPage.tsx';
+import TestMode from './Components/CollectionPageComponents/TestMode.tsx';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "collection/:collectionId/flashcards",
         element: <FlashcardMode/>
+      },
+      {
+        path: "collection/:collectionId/test",
+        element: <TestMode/>
       }
     ]
   },

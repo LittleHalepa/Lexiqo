@@ -4,6 +4,7 @@ import { useNav } from "../../contexts/headerAndFooterContext";
 import { Flashcards } from "./FlashcardsComponent";
 import { sendRequest } from "../../utils/ApiUtils";
 import ConfettiAnimatedIcon, { type ConfettiAnimatedIconRef } from "../UI/Confetti.tsx";
+import ModesDropDown from "../UI/ModesDropDown.tsx";
 
 export const FlashcardMode = () => {
 
@@ -92,29 +93,7 @@ export const FlashcardMode = () => {
         setCards(swappedCards);
         setCardIndex(0);
     }
-
-    const handleModesButtonClick = () => {
-        const settingsMenu = document.getElementById('settings-dropdown');
-
-        if (settingsMenu && !settingsMenu.classList.contains('hidden')) {
-            settingsMenu.classList.add('hidden');
-            const conIcon = document.querySelector('.bxs-cog');
-            conIcon?.classList.remove('rotate-180');
-        }
-
-        const modesMenu = document.getElementById('modes-dropdown');
-        const dropdownIcon= document.getElementById('dropdown-icon');
-        if (modesMenu) {
-            if (modesMenu.classList.contains('hidden')) {
-                modesMenu.classList.remove('hidden');
-                dropdownIcon?.classList.add('rotate-180');
-            } else {
-                modesMenu.classList.add('hidden');
-                dropdownIcon?.classList.remove('rotate-180');
-            }
-        }
-    }
-
+    
     const handleSettingsButtonClick = () => {
 
         const modesMenu = document.getElementById('modes-dropdown');
@@ -152,21 +131,10 @@ export const FlashcardMode = () => {
                 </button>
                 <h2 className="absolute left-1/2 transform text-center -translate-x-1/2 text-lg font-semibold">{collection.name}</h2>
                 <div className="flex items-center gap-4 mr-2 relative">
-                    <button className="text-2xl" onClick={handleModesButtonClick}>
-                        <i id="dropdown-icon" className='bx bx-chevron-down transition-all'></i>
-                        <i className='bx bxs-collection' ></i>
-                    </button>
+                    <ModesDropDown />
                     <button id="settings-button" className="text-2xl" onClick={handleSettingsButtonClick}>
                         <i className='bx bxs-cog transition-all' ></i>
                     </button>
-                </div>
-                <div id="modes-dropdown" className="absolute right-1 top-13 rounded-md shadow-sm bg-white/70 backdrop-blur-2xl border border-gray-300 hidden z-20">
-                    <ul className="flex flex-col gap-1 p-3 text-lg font-medium">
-                        <li id="flashcards" className="py-2 px-4 rounded-md flex items-center gap-2 relative text-brand hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bxs-collection text-brand' ></i> Flashcards</li>
-                        <li id="learn" className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bx-brain' ></i> Learn</li>
-                        <li id="test" className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bxs-graduation' ></i> Test</li>
-                        <li id="challenge" className="py-2 px-4 rounded-md flex items-center gap-2 hover:bg-gray-100 cursor-pointer transition-all"><i className='bx bx-game' ></i> Challenge</li>
-                    </ul>
                 </div>
                 <div id="settings-dropdown" className="absolute right-1 top-13 rounded-md shadow-sm bg-white/70 backdrop-blur-2xl border border-gray-300 hidden z-20">
                     <ul className="flex flex-col gap-1 p-3 text-lg font-medium">
