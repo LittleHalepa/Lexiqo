@@ -55,37 +55,37 @@ const TestMode = () => {
         'black': 'focus:ring-gray-800',
     };
 
+    const fetchTestData = async () => {
+        try {
+            const numberOfFourAnswersQuestions = 4;
+            const numberOfTrueFalseQuestions = 4;
+            const numberOfTextInputQuestions = 4;
+
+            const collectionUuid = collection.uuid;
+
+            const testData = await sendRequest(
+                `${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-test-data?numberOfFourAnswersQuestions=${numberOfFourAnswersQuestions}&numberOfTrueFalseQuestions=${numberOfTrueFalseQuestions}&numberOfTextInputQuestions=${numberOfTextInputQuestions}&collectionUuid=${collectionUuid}`,
+                'GET'
+            );
+
+            if (testData.error) {
+                console.error("Error fetching test data:", testData.message);
+                return;
+            }
+
+            setTestContent(testData.testSet);
+        } catch (error) {
+            console.error("Error fetching test data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         setIsLoading(true);
 
-        const fetchTestData = async () => {
-            try {
-                const numberOfFourAnswersQuestions = 4;
-                const numberOfTrueFalseQuestions = 4;
-                const numberOfTextInputQuestions = 4;
-
-                const collectionUuid = collection.uuid;
-
-                const testData = await sendRequest(
-                    `${import.meta.env.VITE_BACKEND_URL}/api/dashboard/get-test-data?numberOfFourAnswersQuestions=${numberOfFourAnswersQuestions}&numberOfTrueFalseQuestions=${numberOfTrueFalseQuestions}&numberOfTextInputQuestions=${numberOfTextInputQuestions}&collectionUuid=${collectionUuid}`,
-                    'GET'
-                );
-
-                if (testData.error) {
-                    console.error("Error fetching test data:", testData.message);
-                    return;
-                }
-
-                setTestContent(testData.testSet);
-            } catch (error) {
-                console.error("Error fetching test data:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         fetchTestData();
-    }, [testContent.length, collection.uuid]);
+    }, []);
 
     useEffect(() => {
         setShowHeader(false);
@@ -174,7 +174,9 @@ const TestMode = () => {
         }, 200);
     }
 
-    const handleTryAgain = () => {
+    const handleTryAgain = async () => {
+        await fetchTestData();
+
         setUserAnswers({});
         setIsTestCompleted(false);
         setCorrectAnswersCount({ count: 0, percentage: 50 });
