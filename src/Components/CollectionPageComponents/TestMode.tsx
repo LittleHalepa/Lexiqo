@@ -175,13 +175,13 @@ const TestMode = () => {
     }
 
     const handleTryAgain = async () => {
-        await fetchTestData();
-
         setUserAnswers({});
         setIsTestCompleted(false);
         setCorrectAnswersCount({ count: 0, percentage: 50 });
         setWrongAnswersCount({ count: 0, percentage: 50 });
         setTestContent([]);
+
+        await fetchTestData();
 
         scrollTo({ top: 0, behavior: 'smooth' });
     }
