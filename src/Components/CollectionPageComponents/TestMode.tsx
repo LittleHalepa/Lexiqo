@@ -179,7 +179,6 @@ const TestMode = () => {
         setIsTestCompleted(false);
         setCorrectAnswersCount({ count: 0, percentage: 50 });
         setWrongAnswersCount({ count: 0, percentage: 50 });
-        setTestContent([]);
 
         await fetchTestData();
 
